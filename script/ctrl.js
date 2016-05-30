@@ -1,7 +1,14 @@
 angular.module('myApp', ['ui.router','restangular']);
-angular.module('myApp').config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/birth');
+angular.module('myApp').config(function($stateProvider, $urlRouterProvider, RestangularProvider) {
+    _.contains = _.includes;
 
+    RestangularProvider.setBaseUrl('https://www.foaas.com/');
+
+    RestangularProvider.setResponseExtractor(function(response, operation) {
+					return response.message;
+				});
+
+    $urlRouterProvider.otherwise('/birth');
     $stateProvider
       .state('birth', {
         url: '/birth',
@@ -9,7 +16,15 @@ angular.module('myApp').config(function($stateProvider, $urlRouterProvider) {
       })
       .state('birth.childhood', {
         url: '/childhood',
-        template: '<div>You are grown up<br><button ui-sref="birth.childhood.study">study</button><br><button ui-sref="birth.childhood.career">career</button><div ui-view></div></div>'
+        controller: function($scope, message){
+          $scope.msg = message;
+        },
+        resolve: {
+						message : function(Restangular) {
+							return Restangular.one("bday/Ted/Billy").get()
+						 }
+					},
+        template: '<div>{{msg}} <br> You are grown up<br><button ui-sref="birth.childhood.study">study</button><br><button ui-sref="birth.childhood.career">career</button><div ui-view></div></div>'
       })
       .state('birth.childhood.study', {
         url: '/study',

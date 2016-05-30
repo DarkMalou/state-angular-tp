@@ -1,0 +1,59 @@
+<html>
+<body ng-app="myApp">
+  <!-- index.html -->
+  <!-- We'll also add some navigation: -->
+  <button ui-sref="birth">birth</button>
+  <div ui-view>
+  </div>
+
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.0/angular-ui-router.js"></script>
+
+  <script type="text/javascript">
+    angular.module('myApp', ['ui.router']);
+
+    angular.module('myApp').config(function($stateProvider, $urlRouterProvider) {
+      //
+      // For any unmatched url, redirect to /state1
+      $urlRouterProvider.otherwise("/birth");
+      //
+      // Now set up the states
+      $stateProvider
+        .state('birth', {
+          url: "/birth",
+          template: "<div>birth <button ui-sref='birth.childhood'>childhood</button><div ui-view></div></div>"
+        })
+      .state('birth.childhood', {
+        url: "/childhood",
+        template: "<div>childhood <button ui-sref='birth.childhood.study'>study</button><button ui-sref='birth.childhood.carrier'>carrier</button><div ui-view></div></div>"
+      })
+      .state('birth.childhood.study', {
+        url: "/study",
+        template: "<div>study <button ui-sref='birth.childhood.study.phd'>phd</button><div ui-view></div></div>"
+      })
+      .state('birth.childhood.carrier', {
+        url: "/carrier",
+        template: "<div>carrier <button ui-sref='birth.childhood.carrier.workLife'>workLife</button><div ui-view></div></div>"
+      })
+      .state('birth.childhood.study.phd', {
+        url: "/phd",
+        template: "<div>phd <div ui-view></div></div>"
+      })
+      .state('birth.childhood.carrier.workLife', {
+        url: "/workLife",
+        template: "<div>workLife <button ui-sref='birth.childhood.carrier.workLife.pension'>pension</button><div ui-view></div></div> "
+      })
+      .state('birth.childhood.carrier.workLife.pension', {
+        url: "/pension",
+        template: "<div>pension <button ui-sref='birth.childhood.carrier.workLife.pension.death'>death</button><div ui-view></div></div>"
+      })
+      .state('birth.childhood.carrier.workLife.pension.death', {
+        url: "/death",
+        template: "<div>death <div ui-view></div></div>"
+      });
+    });
+  </script>
+  </body>
+
+</html>
